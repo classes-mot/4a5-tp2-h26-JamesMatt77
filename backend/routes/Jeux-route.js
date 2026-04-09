@@ -1,4 +1,5 @@
 import express from "express";
+import jeuxController from "../controllers/Jeux-controller.js"
 
 const router = express.Router();
 
@@ -6,7 +7,7 @@ router.get("/", jeuxController.getJeux);
 
 router.get("/:id", jeuxController.getJeuxById);
 
-router.post("/", jeuxController.createJeux);
+router.post("/", jeuxController.postJeux);
 
 router.put("/:id", jeuxController.updateJeux);
 

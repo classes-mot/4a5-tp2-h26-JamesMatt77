@@ -1,9 +1,11 @@
 import jwt from "jsonwebtoken";
+import HttpError from "../util/http-error.js";
 import { User } from "../models/User.js";
 
 const registerUser = async (req, res, next) => {
   console.log("registering");
-  const { name, email, password } = req.body;
+  console.log(req.body);
+  const { username, email, password } = req.body;
 
   let existingUser;
 
@@ -20,7 +22,7 @@ const registerUser = async (req, res, next) => {
     return;
   }
   const createdUser = new User({
-    name,
+    username,
     email,
     password,
   });

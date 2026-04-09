@@ -1,4 +1,4 @@
-import { Jeux } from "../model/Jeux.js";
+import { Jeux } from "../models/Jeux.js";
 import mongoose from "mongoose";
 
 const getJeux = async (req, res, next) => {
