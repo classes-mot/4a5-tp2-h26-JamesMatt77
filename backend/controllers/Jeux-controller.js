@@ -1,5 +1,4 @@
 import { Jeux } from "../model/Jeux.js";
-import { User } from "../model/User.js";
 import mongoose from "mongoose";
 
 const getJeux = async (req, res, next) => {
@@ -9,6 +8,19 @@ const getJeux = async (req, res, next) => {
   } catch (err) {
     return next(new Error("erreur"));
   }
+};
+
+const getJeuxById = async (req, res, next) => {
+  const jeuxId = req.params.tid; // /api/jeux/t1
+
+  let jeu;
+  try {
+    jeu = await Jeux.findById(jeuxId);
+  } catch (err) {
+    console.log(err);
+    return next(new Error("erreur"));
+  }
+  res.json({ jeu: jeu.toObject({getters: true}) });
 };
 
 const postJeux = async (req, res, next) => {
@@ -41,4 +53,4 @@ const deleteJeux = async (req, res, next) => {
   }
 };
 
-export default { getJeux, postJeux, updateJeux, deleteJeux };
+export default { getJeux, postJeux, getJeuxById, updateJeux, deleteJeux };
