@@ -6,7 +6,7 @@ const getJeux = async (req, res, next) => {
     const jeux = await Jeux.find();
     res.json(jeux);
   } catch (err) {
-    return next(err);
+    return next(new Error('erreur'));
   }
 };
 
@@ -18,7 +18,7 @@ const getJeuxById = async (req, res, next) => {
     jeu = await Jeux.findById(jeuxId);
   } catch (err) {
     console.log(err);
-    return next(err);
+    return next(new Error('erreur'));
   }
 
   if (!jeu) {
@@ -29,12 +29,19 @@ const getJeuxById = async (req, res, next) => {
 };
 
 const postJeux = async (req, res, next) => {
+      const jeu = new Jeux({
+      title: req.body.title,
+      genre: req.body.genre,
+      player: req.body.player,
+    });
+
   try {
-    const jeu = await Jeux.create(req.body);
-    res.status(201).json(jeu);
+
+    await jeu.save();
   } catch (err) {
-    return next(err);
+    return next(new Error('erreur'));
   }
+  res.status(201).json(jeu);
 };
 
 const updateJeux = async (req, res, next) => {
@@ -52,7 +59,7 @@ const updateJeux = async (req, res, next) => {
 
     res.status(200).json({ jeu: updatedJeu.toObject({ getters: true }) });
   } catch (err) {
-    return next(err);
+    return next(new Error('erreur'));
   }
 };
 
@@ -69,7 +76,7 @@ const deleteJeux = async (req, res, next) => {
 
     res.status(200).json({ message: "Jeu supprimer" });
   } catch (err) {
-    return next(err);
+    return next(new Error('erreur'));
   }
 };
 
