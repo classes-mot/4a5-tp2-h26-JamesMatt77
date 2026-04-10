@@ -6,50 +6,70 @@ const getJeux = async (req, res, next) => {
     const jeux = await Jeux.find();
     res.json(jeux);
   } catch (err) {
-    return next(new Error("erreur"));
+    return next(err);
   }
 };
 
 const getJeuxById = async (req, res, next) => {
-  const jeuxId = req.params.tid; // /api/jeux/t1
+  const jeuxId = req.params.id;
 
   let jeu;
   try {
     jeu = await Jeux.findById(jeuxId);
   } catch (err) {
     console.log(err);
-    return next(new Error("erreur"));
+    return next(err);
   }
-  res.json({ jeu: jeu.toObject({getters: true}) });
+
+  if (!jeu) {
+    return res.status(404).json({ message: "Jeu non trouvé" });
+  }
+
+  res.json({ jeu: jeu.toObject({ getters: true }) });
 };
 
 const postJeux = async (req, res, next) => {
   try {
     const jeu = await Jeux.create(req.body);
-    res.json(jeu);
+    res.status(201).json(jeu);
   } catch (err) {
-    return next(new Error("erreur"));
+    return next(err);
   }
 };
 
 const updateJeux = async (req, res, next) => {
+  const jeuId = req.params.id;
+  const jeuUpdates = req.body;
+
   try {
-    const jeu = await Jeux.findByIdAndUpdate(req.params.id, req.body, {
+    const updatedJeu = await Jeux.findByIdAndUpdate(jeuId, jeuUpdates, {
       new: true,
     });
-    res.json(jeu);
+    
+    if (!updatedJeu) {
+      return res.status(404).json({ message: 'Jeu non trouvée...' });
+    }
+
+    res.status(200).json({ jeu: updatedJeu.toObject({ getters: true }) });
   } catch (err) {
-    return next(new Error("erreur"));
+    return next(err);
   }
-  res.json(prof);
 };
 
 const deleteJeux = async (req, res, next) => {
+  const jeuId = req.params.id;
+
   try {
-    const jeu = await Jeux.findByIdAndDelete(req.params.id);
-    res.json({ message: "Jeu supprimer" });
+    const jeu = await Jeux.findById(jeuId);
+    if (!jeu) {
+      return res.status(404).json({ message: 'Jeu non trouvée.'});
+    }
+    await jeu.deleteOne();
+
+
+    res.status(200).json({ message: "Jeu supprimer" });
   } catch (err) {
-    return next(new Error("erreur"));
+    return next(err);
   }
 };
 

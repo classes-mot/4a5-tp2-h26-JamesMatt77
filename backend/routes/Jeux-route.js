@@ -1,5 +1,5 @@
 import express from "express";
-import jeuxController from "../controllers/Jeux-controller.js"
+import jeuxController from "../controllers/Jeux-controller.js";
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.get("/:id", jeuxController.getJeuxById);
 
 router.post("/", jeuxController.postJeux);
 
-router.put("/:id", jeuxController.updateJeux);
+router.patch("/:id", jeuxController.updateJeux);
 
 router.delete("/:id", jeuxController.deleteJeux);
 
